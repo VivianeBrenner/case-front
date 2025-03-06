@@ -37,9 +37,9 @@ const ProcessDetails = () => {
       setLoading(false);
       return;
     }
-    
+
     setTimeout(() => {
-      setProcess(mockProcess); 
+      setProcess(mockProcess);
       setLoading(false);
     }, 1000);
   }, [id]);
@@ -75,19 +75,22 @@ const ProcessDetails = () => {
       </button>
 
       {loading ? (
-        <p className="text-white mt-4">Carregando...</p>
+        <div className="flex justify-center items-center mt-4">
+          <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+        </div>
       ) : error ? (
         <p className="text-red-500 mt-4">{error}</p>
       ) : process ? (
+
         <div className="bg-white text-gray-900 p-6 rounded-lg shadow-lg mt-6">
           <h2 className="text-2xl font-bold mb-4">
             {isEditing ? (
               <input
-              type="text"
-              name="name"
-              value={process.name}
-              onChange={handleEdit}
-              className="border p-2 rounded-lg w-full"
+                type="text"
+                name="name"
+                value={process.name}
+                onChange={handleEdit}
+                className="border p-2 rounded-lg w-full"
               />
             ) : (
               process.name
@@ -97,18 +100,18 @@ const ProcessDetails = () => {
             <strong>Área:</strong>{" "}
             {isEditing ? (
               <input
-              type="text"
-              name="name"
-              value={process.name}
-              onChange={handleEdit}
-              className="border p-2 rounded-lg w-full"
+                type="text"
+                name="name"
+                value={process.name}
+                onChange={handleEdit}
+                className="border p-2 rounded-lg w-full"
               />
             ) : (
               process.area
-            )} 
+            )}
           </p>
           <p>
-          <strong>Status:</strong>{" "}
+            <strong>Status:</strong>{" "}
             {isEditing ? (
               <select
                 name="status"
@@ -125,7 +128,7 @@ const ProcessDetails = () => {
             )}
           </p>
           <p>
-          <strong>Responsável:</strong>{" "}
+            <strong>Responsável:</strong>{" "}
             {isEditing ? (
               <input
                 type="text"

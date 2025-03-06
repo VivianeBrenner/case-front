@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { FileUploadProps } from "../types/file.types";
+import { FileUploadProps } from "../../types/file.types";
 
 const FileUpload = ({ processId }: FileUploadProps) => {
   const [file, setFile] = useState<File | null>(null);
