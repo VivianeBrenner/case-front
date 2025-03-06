@@ -1,25 +1,53 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserData } from "../../types/user.types";
+
 
 const Register = () => {
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [confirmarSenha, setConfirmarSenha] = useState("");
-  const [erro, setErro] = useState("");
-
   const navigate = useNavigate();
+  const [formData, setFormData] = useState<UserData>({
+    nome: "",
+    email: "",
+    senha: "",
+    confirmarSenha: "",
+  });
+  const [erro, setErro] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErro(null);
+  };
+
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const handleRegister = async () => {
-    if (senha !== confirmarSenha) {
+    setErro(null);
+
+    if (!formData.nome || !formData.email || !formData.senha || !formData.confirmarSenha) {
+      setErro("Todos os campos são obrigatórios!");
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
+      setErro("Formato de e-mail inválido!");
+      return;
+    }
+
+    if (formData.senha.length < 6) {
+      setErro("A senha deve ter no mínimo 6 caracteres.");
+      return;
+    }
+    if (formData.senha !== formData.confirmarSenha) {
       setErro("As senhas não coincidem!");
       return;
     }
 
     try {
-      console.log("Usuário cadastrado:", { nome, email, senha });
-
-      navigate("/login"); // Redireciona para login após cadastro
+      console.log("Usuário cadastrado:", formData);
+      navigate("/login");
     } catch {
       setErro("Falha no cadastro. Tente novamente.");
     }
@@ -40,10 +68,12 @@ const Register = () => {
           </label>
           <input
             type="text"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
+            name="nome"
+            value={formData.nome}
+            onChange={handleChange}
             className="w-full p-2 border rounded-lg bg-gray-50 border-gray-300 text-gray-900 focus:ring-2 focus:ring-purple-500"
             placeholder="Seu nome"
+            required
           />
         </div>
 
@@ -53,10 +83,12 @@ const Register = () => {
           </label>
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             className="w-full p-2 border rounded-lg bg-gray-50 border-gray-300 text-gray-900 focus:ring-2 focus:ring-purple-500"
             placeholder="seu@email.com"
+            required
           />
         </div>
 
@@ -66,10 +98,12 @@ const Register = () => {
           </label>
           <input
             type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
+            name="senha"
+            value={formData.senha}
+            onChange={handleChange}
             className="w-full p-2 border rounded-lg bg-gray-50 border-gray-300 text-gray-900 focus:ring-2 focus:ring-purple-500"
             placeholder="********"
+            required
           />
         </div>
 
@@ -79,10 +113,12 @@ const Register = () => {
           </label>
           <input
             type="password"
-            value={confirmarSenha}
-            onChange={(e) => setConfirmarSenha(e.target.value)}
+            name="confirmarSenha"
+            value={formData.confirmarSenha}
+            onChange={handleChange}
             className="w-full p-2 border rounded-lg bg-gray-50 border-gray-300 text-gray-900 focus:ring-2 focus:ring-purple-500"
             placeholder="********"
+            required
           />
         </div>
 

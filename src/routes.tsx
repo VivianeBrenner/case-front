@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Dashboard from "./pages/process/Dashboard";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import ProcessForm from "./components/forms/ProcessForm";
+import ProcessDetails from "./pages/process/ProcessDetails";
 
 
 const AppRoutes = () => {
@@ -10,8 +12,11 @@ const AppRoutes = () => {
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/" element={<Dashboard />} />
-               {/*  <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} /> */}
+                <Route path="/dashboard" element={<Dashboard />} />
+                {/*  <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} /> */}
+                <Route path="/process/new" element={<ProcessForm />} />
+                <Route path="/process/:id" element={<ProcessDetails />} />
+
             </Routes>
         </Router>
     );

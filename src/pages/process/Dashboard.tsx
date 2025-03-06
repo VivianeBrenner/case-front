@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ProcessFlow from "../components/ProcessFlow";
-import ProcessChart from "../components/ProcessChart";
+import ProcessFlow from "../../components/flow/ProcessFlow";
+import ProcessChart from "../../components/charts/ProcessChart"
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [selectedArea, setSelectedArea] = useState("Todas");
 
-  const areas = ["Todas", "Recursos Humanos", "Financeiro", "TI"];
+  const areas: string[] = ["Todas", "Recursos Humanos", "Financeiro", "TI"];
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col">
       <header className="bg-gray-800 p-4 shadow-md flex justify-between items-center">
         <h1 className="text-xxl font-bold text-white">Dashboard</h1>
         <button
-          onClick={() => navigate("/processes/new")}
+          onClick={() => navigate("/process/new")}
           className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-all"
         >
           + Novo Processo
@@ -67,7 +67,7 @@ const Dashboard = () => {
           <h2 className="text-xl font-semibold mb-4">Hierarquia de Processos</h2>
           <ProcessFlow />
         </div>
-        
+
         <div className="mt-8">
           <h2 className="text-xl font-semibold mb-4">Distribuição dos Processos</h2>
           <ProcessChart />

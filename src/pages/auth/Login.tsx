@@ -1,18 +1,26 @@
 import { useState } from "react";
-import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../store/authStore";
+import { AuthCredentials } from "../../types/auth.types";
+
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [erro, setErro] = useState("");
-
-  const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
+  const [credentials, setCredentials] = useState<AuthCredentials>({
+    email: "",
+    senha: "",
+  });
+  const [erro, setErro] = useState<string | null>(null);
+  const login = useAuthStore((state) => state.login);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCredentials((prev) => ({ ...prev, [name]: value }));
+  }
 
   const handleLogin = async () => {
     try {
-      await login(email, senha);
+      await login(credentials.email, credentials.senha);
       navigate("/dashboard");
     } catch {
       setErro("Email ou senha inválidos!");
@@ -34,8 +42,9 @@ const Login = () => {
           </label>
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={credentials.email}
+            onChange={handleChange}
             className="w-full p-2 border rounded-lg bg-gray-50 border-gray-300 text-gray-900 focus:ring-2 focus:ring-purple-500"
             placeholder="seu@email.com"
           />
@@ -47,8 +56,9 @@ const Login = () => {
           </label>
           <input
             type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
+            name="senha"
+            value={credentials.senha}
+            onChange={handleChange}
             className="w-full p-2 border rounded-lg bg-gray-50 border-gray-300 text-gray-900 focus:ring-2 focus:ring-purple-500"
             placeholder="********"
           />
@@ -56,7 +66,9 @@ const Login = () => {
 
         <div className="flex items-center justify-between mt-4">
           <label className="flex items-center text-sm text-gray-600">
-            <input type="checkbox" className="mr-2" /> Lembrar-me
+            <input
+              type="checkbox"
+              className="mr-2" /> Lembrar-me
           </label>
           <a href="#" className="text-sm text-purple-500 hover:underline">
             Esqueceu a senha?

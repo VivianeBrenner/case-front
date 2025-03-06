@@ -1,13 +1,14 @@
 import ReactFlow, { MiniMap, Controls, Background } from "reactflow";
 import "reactflow/dist/style.css";
+import { ProcessNode, ProcessEdge } from "../../types/flow.types";
 
-const nodes = [
+const nodes: ProcessNode[] = [
     { id: "1", position: { x: 250, y: 0 }, data: { label: "Processo Principal" } },
     { id: "2", position: { x: 100, y: 100 }, data: { label: "Subprocesso 1" } },
     { id: "3", position: { x: 400, y: 100 }, data: { label: "Subprocesso 2" } },
 ];
 
-const edges = [
+const edges: ProcessEdge[] = [
     { id: "e1-2", source: "1", target: "2", animated: true },
     { id: "e1-3", source: "1", target: "3", animated: true },
 ];
