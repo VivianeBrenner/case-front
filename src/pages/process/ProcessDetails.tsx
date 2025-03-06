@@ -56,9 +56,11 @@ const ProcessDetails = () => {
     });
   };
 
-  const handleEdit = () => {
-    setIsEditing(true);
-  }
+  const handleEdit = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setProcess((prev) => prev ? { ...prev, [name]: value } : null);
+};
+
 
   const saveChanges = () => {
     console.log("Novos dados:", process);

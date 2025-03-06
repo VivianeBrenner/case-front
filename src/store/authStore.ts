@@ -11,7 +11,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   token: localStorage.getItem("token"),
   user: null,
 
-  login: async (email, senha) => {
+  login: async (email) => {
     const mockUsers: User[] = [
       { id: "1", nome: "Admin", email: "admin@email.com", role: "admin" },
       { id: "2", nome: "Gerente", email: "gerente@email.com", role: "gerente" },
