@@ -6,3 +6,5 @@ export interface AuthCredentials {
   export interface AuthStore {
     login: (email: string, senha: string) => Promise<void>;
   }
+
+  

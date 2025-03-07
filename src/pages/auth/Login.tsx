@@ -1,32 +1,27 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../store/authStore";
-import { AuthCredentials } from "../../types/auth.types";
-
+import { login } from "../../services/authservice";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [credentials, setCredentials] = useState<AuthCredentials>({
-    email: "",
-    senha: "",
-  });
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
   const [erro, setErro] = useState<string | null>(null);
-  const login = useAuthStore((state) => state.login);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setCredentials((prev) => ({ ...prev, [name]: value }));
-  }
-
-  const handleLogin = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      await login(credentials.email, credentials.senha);
-      navigate("/dashboard");
+      const response = await login(email, senha);
+      if (response?.token) {
+        navigate("/dashboard");
+      } else {
+        setErro("Erro ao autenticar, tente novamente.");
+      }
     } catch {
       setErro("Email ou senha inválidos!");
     }
   };
-
+  
   return (
     <section className="min-h-screen flex items-center justify-center bg-gray-900">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl">
@@ -40,13 +35,13 @@ const Login = () => {
           <label className="block text-sm font-medium text-gray-900">
             E-mail
           </label>
-          <input
-            type="email"
-            name="email"
-            value={credentials.email}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-lg bg-gray-50 border-gray-300 text-gray-900 focus:ring-2 focus:ring-purple-500"
-            placeholder="seu@email.com"
+          <input 
+          type="email" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
+          placeholder="Email" 
+          className="w-full p-2 border rounded-lg bg-gray-50 border-gray-300 text-gray-900 focus:ring-2 focus:ring-purple-500"
+          required 
           />
         </div>
 
@@ -57,18 +52,18 @@ const Login = () => {
           <input
             type="password"
             name="senha"
-            value={credentials.senha}
-            onChange={handleChange}
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)} 
             className="w-full p-2 border rounded-lg bg-gray-50 border-gray-300 text-gray-900 focus:ring-2 focus:ring-purple-500"
-            placeholder="********"
+            required 
           />
         </div>
 
         <div className="flex items-center justify-between mt-4">
           <label className="flex items-center text-sm text-gray-600">
-            <input
-              type="checkbox"
-              className="mr-2" /> Lembrar-me
+            <input 
+            type="checkbox" 
+            className="mr-2" /> Lembrar-me
           </label>
           <a href="#" className="text-sm text-purple-500 hover:underline">
             Esqueceu a senha?
@@ -76,7 +71,7 @@ const Login = () => {
         </div>
 
         <button
-          onClick={handleLogin}
+          onClick={handleSubmit}
           className="w-full bg-purple-600 text-white p-3 rounded-lg mt-6 hover:bg-purple-700 transition-all"
         >
           Entrar

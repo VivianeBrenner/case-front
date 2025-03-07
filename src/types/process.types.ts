@@ -15,13 +15,14 @@ export interface Subprocess {
   }
   
   export interface Process {
-    id: string;
+    id: number;
     name: string;
     area: string;
     status: string;
     responsible: string;
     type: string;
     subprocesses: Subprocess[];
+    updatedAt: string;
     history: HistoryEntry[];
     comments: Comment[];
   }

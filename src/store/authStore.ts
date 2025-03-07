@@ -1,32 +1,46 @@
 import { create } from "zustand";
-import { User } from "../types/user.types";
+import api from "../services/api";
+
+interface User {
+  id: number;
+  nome: string;
+  email: string;
+  role: string;
+}
 
 interface AuthState {
   user: User | null;
+  token: string | null;
   login: (email: string, senha: string) => Promise<void>;
   logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  token: localStorage.getItem("token"),
-  user: null,
+  user: JSON.parse(localStorage.getItem("user") || "null"),
+  token: localStorage.getItem("token") || null,
 
-  login: async (email) => {
-    const mockUsers: User[] = [
-      { id: "1", nome: "Admin", email: "admin@email.com", role: "admin" },
-      { id: "2", nome: "Gerente", email: "gerente@email.com", role: "gerente" },
-      { id: "3", nome: "Usuário", email: "usuario@email.com", role: "usuario" },
-    ];
+  login: async (email, senha) => {
+    try {
+      const response = await api.post("/auth/login", { email, senha });
+      const { access_token } = response.data;
 
-    const user = mockUsers.find((u) => u.email === email);
-    if (!user) throw new Error("Usuário não encontrado!");
+      const userResponse = await api.get("/users/me", {
+        headers: { Authorization: `Bearer ${access_token}` },
+      });
 
-    set({ user });
-    localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", access_token);
+      localStorage.setItem("user", JSON.stringify(userResponse.data));
+
+      set({ user: userResponse.data, token: access_token });
+    } catch (error) {
+      console.error("Erro no login:", error);
+      throw new Error("Credenciais inválidas");
+    }
   },
 
   logout: () => {
-    set({ user: null });
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
+    set({ user: null, token: null });
   },
 }));
