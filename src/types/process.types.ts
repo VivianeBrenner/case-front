@@ -1,13 +1,15 @@
 export interface Subprocess {
-    id: number;
-    name: string;
-    expanded: boolean;
-  }
-  
-  export interface HistoryEntry {
-    date: string;
-    action: string;
-  }
+  id: number;
+  nome: string;
+  subprocesses?: Subprocess[];
+  expanded: boolean;
+}
+
+export interface CreateSubprocessData {
+  nome: string;
+  processId?: number | null;
+  parentSubId?: number | null;
+}
   
   export interface Comment {
     user: string;
@@ -16,27 +18,41 @@ export interface Subprocess {
   
   export interface Process {
     id: number;
-    name: string;
-    area: string;
+    nome: string;
+    area: {
+      nome: string;
+    };
     status: string;
     responsible: string;
-    type: string;
-    subprocesses: Subprocess[];
+    documentation?: string;
     updatedAt: string;
-    history: HistoryEntry[];
-    comments: Comment[];
+    subprocesses: Subprocess[];
   }
   
   export interface ProcessData {
     name: string;
-    area: string;
-    type: string;
+    areaId: number;
     status: string;
     responsible: string;
-    tools: string;
     documentation: File | null;
   }
   
   export interface ProcessFormProps {
     initialData?: ProcessData;
+  }
+
+  export interface ProcessState {
+    processes: Process[];
+    loadProcesses: () => Promise<void>;
+    addProcess: (name: string, status: string) => Promise<void>;
+    updateProcessById: (id: number, name: string, status: string) => Promise<void>;
+    removeProcess: (id: number) => Promise<void>;
+  }
+
+  export interface ProcessPayload {
+    nome: string;
+    areaId: number;
+    status: string;
+    responsible: string;
+    documentation?: string | null;
   }

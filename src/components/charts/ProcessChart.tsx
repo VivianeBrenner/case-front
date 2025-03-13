@@ -1,36 +1,41 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { ProcessChartData } from "../../types/chart.types";
+import { Process } from "../../types/process.types";
 
-const data: ProcessChartData[] = [
-    { name: "Concluídos", value: 4, color: "#4CAF50" },
-    { name: "Em Andamento", value: 6, color: "#FFC107" },
-    { name: "Pendentes", value: 2, color: "#F44336" },
-];
+interface ProcessChartProps {
+  processes: Process[];
+}
 
-const ProcessChart = () => {
-    return (
-        <div className="h-80 w-full bg-white rounded-lg shadow-md p-4">
-            <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                    <Pie
-                        data={data}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        dataKey="value"
+const COLORS = ["#4CAF50", "#FFC107", "#F44336", "#2196F3", "#9C27B0"]; // Exemplo
 
-                    >
-                        {data.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
+const ProcessChart: React.FC<ProcessChartProps> = ({ processes }) => {
+  const statusCount: Record<string, number> = {};
 
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                </PieChart>
-            </ResponsiveContainer>
-        </div>
-    );
+  processes.forEach((proc) => {
+    const st = proc.status || "Desconhecido";
+    statusCount[st] = (statusCount[st] || 0) + 1;
+  });
+
+  const data = Object.entries(statusCount).map(([status, count], index) => ({
+    name: status,
+    value: count,
+    color: COLORS[index % COLORS.length],
+  }));
+
+  return (
+    <div className="h-80 w-full bg-white rounded-lg shadow-md p-4">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie data={data} cx="50%" cy="50%" outerRadius={80} dataKey="value">
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.color} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  );
 };
 
 export default ProcessChart;

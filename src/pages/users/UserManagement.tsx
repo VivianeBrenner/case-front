@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { userService } from "../../services/userService";
-import { useAuthStore } from "../../store/authStore";
-
-interface User {
-  id: number;
-  nome: string;
-  email: string;
-  role: string;
-}
+import { User } from "../../types/user.types";
 
 const UserManagement = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuthStore();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -28,22 +22,17 @@ const UserManagement = () => {
     fetchUsers();
   }, []);
 
-  const handleRoleChange = async (userId: number, newRole: string) => {
-    try {
-      await userService.updateUserRole(userId, newRole);
-      setUsers((prevUsers) =>
-        prevUsers.map((u) => (u.id === userId ? { ...u, role: newRole } : u))
-      );
-    } catch (error) {
-      console.error("Erro ao atualizar papel do usuário:", error);
-    }
-  };
+
 
   if (loading) return <p>Carregando...</p>;
-  if (!user || user.role !== "ADMIN") return <p>Acesso negado.</p>;
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
+      <div className="mb-4">
+        <button onClick={() => navigate("/dashboard")} className="bg-gray-700 text-white px-4 py-2 rounded-lg">
+          ← Voltar
+        </button>
+      </div>
       <h1 className="text-2xl font-bold mb-4">Gerenciamento de Usuários</h1>
       <table className="w-full bg-white shadow-md rounded-lg">
         <thead>
@@ -51,7 +40,6 @@ const UserManagement = () => {
             <th className="p-3">ID</th>
             <th className="p-3">Nome</th>
             <th className="p-3">Email</th>
-            <th className="p-3">Papel</th>
             <th className="p-3">Ações</th>
           </tr>
         </thead>
@@ -59,13 +47,15 @@ const UserManagement = () => {
           {users.map((u) => (
             <tr key={u.id} className="border-b">
               <td className="p-3 text-center">{u.id}</td>
-              <td className="p-3">{u.nome}</td>
-              <td className="p-3">{u.email}</td>
-              <td className="p-3">{u.role}</td>
+              <td className="p-3 text-center">{u.nome}</td>
+              <td className="p-3 text-center">{u.email}</td>
               <td className="p-3 text-center">
                 <select
                   value={u.role}
-                  onChange={(e) => handleRoleChange(u.id, e.target.value)}
+                  onChange={(e) => {
+                    e.preventDefault();
+                    alert("Essa funcionalidade estará disponível em breve!");
+                  }}
                   className="p-2 border rounded"
                 >
                   <option value="USER">Usuário</option>
@@ -73,6 +63,7 @@ const UserManagement = () => {
                   <option value="ADMIN">Admin</option>
                 </select>
               </td>
+
             </tr>
           ))}
         </tbody>

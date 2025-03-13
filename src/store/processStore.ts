@@ -1,19 +1,6 @@
 import { create } from "zustand";
 import { getProcesses, createProcess, updateProcess, deleteProcess } from "../services/processService";
-
-interface Process {
-  id: number;
-  name: string;
-  status: string;
-}
-
-interface ProcessState {
-  processes: Process[];
-  loadProcesses: () => Promise<void>;
-  addProcess: (name: string, status: string) => Promise<void>;
-  updateProcessById: (id: number, name: string, status: string) => Promise<void>;
-  removeProcess: (id: number) => Promise<void>;
-}
+import { ProcessState } from "../types/process.types";
 
 export const useProcessStore = create<ProcessState>((set) => ({
   processes: [],
@@ -27,18 +14,25 @@ export const useProcessStore = create<ProcessState>((set) => ({
     }
   },
 
-  addProcess: async (name, status) => {
+  addProcess: async (name: string, status: string) => {
     try {
-      const newProcess = await createProcess(name, status);
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('status', status);
+      const response = await createProcess(formData);
+      const newProcess = response.data;
       set((state) => ({ processes: [...state.processes, newProcess] }));
     } catch (error) {
       console.error("Erro ao criar processo:", error);
     }
   },
 
-  updateProcessById: async (id, name, status) => {
+  updateProcessById: async (id: number, name: string, status: string) => {
     try {
-      await updateProcess(id, name, status);
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('status', status);
+      await updateProcess(id, formData);
       set((state) => ({
         processes: state.processes.map((proc) =>
           proc.id === id ? { ...proc, name, status } : proc
