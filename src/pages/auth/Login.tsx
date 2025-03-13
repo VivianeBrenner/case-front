@@ -29,7 +29,7 @@ const Login = () => {
 
     try {
       const response = await login(email, senha);
-      // Se a resposta tiver access_token, salva e vai pro dashboard
+     
       if (response.access_token) {
         localStorage.setItem("token", response.access_token);
         navigate("/dashboard");

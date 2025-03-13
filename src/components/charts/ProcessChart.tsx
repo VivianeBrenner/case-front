@@ -5,7 +5,7 @@ interface ProcessChartProps {
   processes: Process[];
 }
 
-const COLORS = ["#4CAF50", "#FFC107", "#F44336", "#2196F3", "#9C27B0"]; // Exemplo
+const COLORS = ["#4CAF50", "#FFC107", "#F44336", "#2196F3", "#9C27B0"]; 
 
 const ProcessChart: React.FC<ProcessChartProps> = ({ processes }) => {
   const statusCount: Record<string, number> = {};

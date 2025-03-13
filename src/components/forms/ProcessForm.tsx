@@ -217,10 +217,13 @@ const ProcessForm = () => {
               <label className="block text-sm font-medium">Status</label>
               <select
                 name="status"
-                value={processData.status}
+                value={processData.status || ""} 
                 onChange={handleChange}
                 className="w-full p-2 border rounded-lg"
               >
+                <option value="" disabled selected>
+                  Selecione um status
+                </option>
                 {["Em andamento", "Concluído"].map((status) => (
                   <option key={status} value={status}>
                     {status}
