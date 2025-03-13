@@ -1,54 +1,54 @@
-# React + TypeScript + Vite
+## Mapeamento de Processos e Subprocessos
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto foi desenvolvido como parte de um case técnico.
 
-Currently, two official plugins are available:
+### Tecnologias Utilizadas
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React** com **TypeScript**
+- **Vite** para build e desenvolvimento
+- **Zustand** para gerenciamento de estado global
+- **Axios** para chamadas à API
+- **Tailwind CSS** para estilização
+- **React Flow** para visualização da hierarquia dos processos
 
-## Expanding the ESLint configuration
+### Funcionalidades
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Cadastro, atualização e exclusão de processos.
+- Cadastro de áreas e associação de processos a áreas.
+- Mapeamento de subprocessos com suporte a níveis infinitos (lazy loading e recursão).
+- Visualização da hierarquia dos processos através de fluxo e gráficos.
+- Sincronização do estado global via Zustand para refletir as atualizações de dados em toda a aplicação.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Deploy
+---
+A aplicação já está publicada em: [case-front-zeta.vercel.app](https://case-front-zeta.vercel.app)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+### Como Rodar localmente:
+---
+1. **Clone o repositório:**
+
+   ```bash
+   git clone https://github.com/VivianeBrenner/case-front.git
+   cd case-front
+   ```
+
+2. **Instale as dependências:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Inicie o servidor de desenvolvimento:**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Acesse a aplicação:**
+
+   Abra o navegador e acesse [http://localhost:3000](http://localhost:3000).
+
